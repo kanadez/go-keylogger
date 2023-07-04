@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kindlyfire/go-keylogger"
-	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -70,7 +69,6 @@ func (ac *ApiClient) sendRequest(payload ApiQueryOptions) {
 
 	if err != nil {
 		fmt.Println(err.Error())
-		//return "", errors.Wrap(err, "account NewRequest")
 	}
 
 	req.Header.Add("Accept", "application/json")
@@ -81,18 +79,7 @@ func (ac *ApiClient) sendRequest(payload ApiQueryOptions) {
 
 	if err != nil {
 		fmt.Println(err.Error())
-		//return "", errors.Wrap(err, "account Do")
 	}
-
-	fmt.Println(fmt.Sprintf("Api server response status: %s", resp.Status))
 
 	defer resp.Body.Close() // defer очищает ресурс
-
-	bodybytes, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		log.Panic(err)
-	}
-
-	log.Println(string(bodybytes))
 }
